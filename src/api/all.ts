@@ -9,7 +9,20 @@ type randomGenerateApi = {
 export function randomGenerate (data: randomGenerateApi) {
   return axios({
     method: 'post',
-    url: '/',
+    url: '/random',
+    data
+  })
+}
+
+type customGenerateApi = {
+  custom: string;
+  rhythm: number;
+  bpm: number;
+}
+export function customGenerate (data: customGenerateApi) {
+  return axios({
+    method: 'post',
+    url: '/custom',
     data
   })
 }

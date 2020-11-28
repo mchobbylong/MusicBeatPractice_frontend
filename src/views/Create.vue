@@ -174,7 +174,7 @@
       <button
         class="btn btn-primary btn-block mt-4"
         :disabled="generating"
-        @click="customGenerate"
+        @click="requestCustom"
       >
         <span v-if="generating" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
         Generate!
@@ -188,7 +188,7 @@ import { defineComponent, onBeforeUnmount, reactive, ref, toRaw, toRefs } from '
 import { BIconCaretRightFill, BIconCaretDownFill } from 'bootstrap-icons-vue'
 import { useRouter } from 'vue-router'
 import { defaultHomepageConfig, HomepageConfig } from './constants'
-import { randomGenerate } from '@/api/all'
+import { randomGenerate, customGenerate } from '@/api/all'
 
 
 // constant
@@ -272,20 +272,40 @@ export default defineComponent({
         'bar_count_max': barCountMax,
         bpm: parseInt(bpm)
       }).then(({ data: id }: any) => {
-        console.log(id)
         router.push({ name: 'Show', params: { id }})
       }).catch((error: any) => {
         router.push({
           name: 'ErrorPage',
-          params: { errorType: error.response.status >= 500 ? 'server' : 'client' }
+          params: {
+            errorType: error.response.status >= 500 ? 'server' : 'client',
+            errorText: error.response.status >= 500 ? null : error.response.data
+          }
         })
       }).finally(() => {
         generating.value = false
       })
     }
 
-    const customGenerate = () => {
-      console.log(toRaw(refConfig))
+    const requestCustom = () => {
+      generating.value = true
+      const { custom, rhythmSelected: rhythm, bpm } = toRaw(refConfig)
+      customGenerate({
+        custom,
+        rhythm,
+        bpm: parseInt(bpm)
+      }).then(({ data: id }: any) => {
+        router.push({ name: 'Show', params: { id }})
+      }).catch((error: any) => {
+        router.push({
+          name: 'ErrorPage',
+          params: {
+            errorType: error.response.status >= 500 ? 'server' : 'client',
+            errorText: error.response.status >= 500 ? null : error.response.data
+          }
+        })
+      }).finally(() => {
+        generating.value = false
+      })
     }
 
     return {
@@ -293,7 +313,7 @@ export default defineComponent({
       availableCombos,
       generating,
       requestRandom,
-      customGenerate,
+      requestCustom,
       ...toRefs(refConfig)
     }
   }

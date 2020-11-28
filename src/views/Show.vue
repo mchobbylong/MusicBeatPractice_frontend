@@ -14,13 +14,15 @@
 
     <audio :src="`/api/media/${id}.mp3`" type="audio/mpeg" class="d-block mx-auto mb-4" controls/>
 
-    <div class="text-center">
+    <div class="text-center mb-4">
       <button
-        :class="['btn', 'mb-4', 'text-center', { 'btn-success': !showAnswer, 'btn-outline-success': showAnswer }]"
+        :class="['btn', { 'btn-success': !showAnswer, 'btn-outline-success': showAnswer }]"
         @click="showAnswer = !showAnswer"
       >
         {{ showAnswer ? 'Hide Answer' : 'Show me the answer!' }}
       </button>
+
+      <button class="btn btn-info ml-2" @click="$router.push({ name: 'Create' })">Generate Another One</button>
     </div>
 
     <div class="text-center">
