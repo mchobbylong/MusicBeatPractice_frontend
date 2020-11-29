@@ -9,7 +9,7 @@
     <h2>Let's have a beat dictation!</h2>
 
     <div class="alert alert-primary mb-4" role="alert">
-      The first 4 beats is telling you the <b>tempo</b>. Don't wanna miss that!
+      The first 4 beats are telling you the <b>tempo</b>. Don't wanna miss that!
     </div>
 
     <audio :src="`/api/media/${id}.mp3`" type="audio/mpeg" class="d-block mx-auto mb-4" controls/>
